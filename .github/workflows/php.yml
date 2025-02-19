@@ -35,4 +35,4 @@ jobs:
           curl -sS https://getcomposer.org/installer | php  # Installer Composer si nécessaire
           php composer.phar require --dev friendsofphp/php-cs-fixer  # Installer PHP-CS-Fixer
           vendor/bin/php-cs-fixer fix --dry-run --diff  # Vérifier le code sans modification
-ECHO is on.
+
