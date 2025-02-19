@@ -1,0 +1,30 @@
+ 
+# Fichiers sensibles
+.env
+config.php
+
+# Dépendances Composer
+/vendor/
+composer.lock
+
+# Fichiers de logs et erreurs
+*.log
+error_log
+
+# Cache et sessions
+cache/
+sessions/
+
+# Fichiers temporaires
+*.tmp
+*.swp
+*.bak
+
+# Fichiers système (Mac, Windows, Linux)
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Uploads (optionnel si tu gères des fichiers uploadés)
+uploads/
