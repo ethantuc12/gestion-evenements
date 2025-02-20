@@ -1,0 +1,38 @@
+name: PHP CI
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  php:
+    runs-on: ubuntu-latest  # Utiliser un environnement Ubuntu pour l'exécution
+
+    steps:
+      - name: Vérifier le code source
+        uses: actions/checkout@v3  # Vérifier le code du repository
+
+      - name: Configurer PHP
+        uses: shivammathur/setup-php@v2  # Configurer PHP
+        with:
+          php-version: '8.0'  # Version PHP à utiliser (modifie si nécessaire)
+
+      - name: Installer les dépendances via Composer
+        run: |
+          curl -sS https://getcomposer.org/installer | php  # Installer Composer si nécessaire
+          php composer.phar install  # Installer les dépendances
+
+      - name: Exécuter les tests PHP
+        run: |
+          vendor/bin/phpunit  # Exécuter les tests PHPUnit si tu utilises PHPUnit
+
+      - name: Vérifier le format du code avec PHP-CS-Fixer
+        run: |
+          curl -sS https://getcomposer.org/installer | php  # Installer Composer si nécessaire
+          php composer.phar require --dev friendsofphp/php-cs-fixer  # Installer PHP-CS-Fixer
+          vendor/bin/php-cs-fixer fix --dry-run --diff  # Vérifier le code sans modification
+
