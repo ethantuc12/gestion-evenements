@@ -1,3 +1,21 @@
+<?php
+require 'db.php'; // Connexion à la BDD
+
+$id_event = $_GET['id'];
+// Récupérer le nombre total de places
+$stmt = $pdo->prepare("SELECT max_participants FROM events WHERE id = ?");
+$stmt->execute([$id_event]);
+$event = $stmt->fetch();
+
+// Récupérer le nombre d'inscrits
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM registrations WHERE event_id = ?");
+$stmt->execute([$id_event]);
+$inscrits = $stmt->fetchColumn();
+
+// Calculer les places restantes
+$places_disponibles = $event['max_participants'] - $inscrits;
+?>  je rajoute cela où
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,6 +73,7 @@ $evenement = mysqli_fetch_assoc($result);
 <center>
     <a href="register.php?id_eve=<?= $id ?>" class="btn btn-success">Inscription</a>
 </center>
+
 
 <?php include('footer.php'); ?>
 
