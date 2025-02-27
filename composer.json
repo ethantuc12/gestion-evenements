@@ -1,0 +1,17 @@
+{
+  "name": "gestion-evenements",
+  "description": "Projet de gestion d'événements",
+  "require": {
+    "php": "^8.0",
+    "ext-pdo": "*",
+    "ext-mbstring": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  }
+}
