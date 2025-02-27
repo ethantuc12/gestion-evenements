@@ -1,38 +1,27 @@
-name: PHP CI
+name: CI Pipeline
 
 on:
   push:
-    branches:
-      - develop
+    branches: [ main, develop ]
   pull_request:
-    branches:
-      - develop
+    branches: [ main, develop ]
 
 jobs:
-  php:
-    runs-on: ubuntu-latest  # Utiliser un environnement Ubuntu pour l'exécution
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Vérifier le code source
-        uses: actions/checkout@v3  # Vérifier le code du repository
+    - name: Cloner le dépôt
+      uses: actions/checkout@v3
 
-      - name: Configurer PHP
-        uses: shivammathur/setup-php@v2  # Configurer PHP
-        with:
-          php-version: '8.0'  # Version PHP à utiliser (modifie si nécessaire)
+    - name: Configurer PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: pdo_mysql, mbstring
 
-      - name: Installer les dépendances via Composer
-        run: |
-          curl -sS https://getcomposer.org/installer | php  # Installer Composer si nécessaire
-          php composer.phar install  # Installer les dépendances
+    - name: Installer les dépendances via Composer
+      run: composer install --no-progress --no-suggest
 
-      - name: Exécuter les tests PHP
-        run: |
-          vendor/bin/phpunit  # Exécuter les tests PHPUnit si tu utilises PHPUnit
-
-      - name: Vérifier le format du code avec PHP-CS-Fixer
-        run: |
-          curl -sS https://getcomposer.org/installer | php  # Installer Composer si nécessaire
-          php composer.phar require --dev friendsofphp/php-cs-fixer  # Installer PHP-CS-Fixer
-          vendor/bin/php-cs-fixer fix --dry-run --diff  # Vérifier le code sans modification
-
+    - name: Lancer les tests PHPUnit
+      run: vendor/bin/phpunit --configuration phpunit.xml
