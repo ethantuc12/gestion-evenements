@@ -2,9 +2,9 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [main, develop]
+    branches: [ main, develop ]
   pull_request:
-    branches: [main, develop]
+    branches: [ main, develop ]
 
 jobs:
   build:
@@ -15,25 +15,22 @@ jobs:
         php-version: ['8.0', '8.1']
 
     steps:
-      - name: Cloner le dépôt
-        uses: actions/checkout@v3
+    - name: Cloner le dépôt
+      uses: actions/checkout@v3
 
-      - name: Configurer PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-          extensions: pdo_mysql, mbstring
-          coverage: none
+    - name: Configurer PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        extensions: pdo_mysql, mbstring
 
-      - name: Installer les dépendances via Composer
-        run: composer install --no-progress --no-suggest
+    - name: Installer les dépendances via Composer
+      run: composer install --no-progress --no-suggest
 
-      - name: Lancer les tests avec PHPUnit
-        uses: php-actions/phpunit@v9
-        with:
-          configuration: phpunit.xml
+    - name: Lancer les tests PHPUnit
+      run: vendor/bin/phpunit --configuration phpunit.xml
 
-      - name: Vérifier le format du code avec PHP-CS-Fixer
-        run: |
-          composer require --dev friendsofphp/php-cs-fixer
-          vendor/bin/php-cs-fixer fix --dry-run --diff
+    - name: Vérifier le format du code avec PHP-CS-Fixer
+      run: |
+        composer require --dev friendsofphp/php-cs-fixer
+        vendor/bin/php-cs-fixer fix --dry-run --diff
