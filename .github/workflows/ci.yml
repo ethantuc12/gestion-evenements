@@ -2,29 +2,35 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        php-version: ['8.0', '8.1']
+
     steps:
     - name: Cloner le dépôt
       uses: actions/checkout@v3
 
-    - name: Installer PHP et extensions
+    - name: Configurer PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.1'
+        php-version: ${{ matrix.php-version }}
         extensions: pdo_mysql, mbstring
 
-    - name: Installer Composer
+    - name: Installer les dépendances via Composer
       run: composer install --no-progress --no-suggest
 
     - name: Lancer les tests
-      run: phpunit tests/
+      run: vendor/bin/phpunit tests/
 
-    - name: Vérifier la syntaxe PHP
-      run: php -l src/
+    - name: Vérifier le format du code avec PHP-CS-Fixer
+      run: |
+        composer require --dev friendsofphp/php-cs-fixer
+        vendor/bin/php-cs-fixer fix --dry-run --diff
